@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+@media (max-width: 880px) {
+  .hide-below-880 {
+    display: none !important;
+  }
+}
