@@ -13,18 +13,52 @@ function Signup() {
   });
 
   const [errors, setErrors] = useState({
-    email: "",
-    username: "",
-    password: "",
+    emailError: "",
+    usernameError: "",
+    passwordError: "",
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [shake, setShake] = useState(false);
   const navigate = useNavigate();
 
-  
+  const validate = () => {
+    const newErrors = {};
+    if (!fields.email) {
+      newErrors.emailError = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(fields.email)) {
+      newErrors.emailError = "Email is invalid";
+    }
+    if (!fields.username) {
+      newErrors.usernameError = "Full name is required";
+    }
+    if (!fields.password) {
+      newErrors.passwordError = "Password is required";
+    } else if (fields.password.length < 6) {
+      newErrors.passwordError = "Password must be at least 6 characters";
+    }
+    return newErrors;
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    const validationErrors = validate();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      setShake(true);
+      return;
+    }
+    setErrors({});
     navigate("/signin");
+  };
+
+  // Animation variants for shake
+  const shakeVariant = {
+    shake: {
+      x: [0, -10, 10, -10, 10, 0],
+      transition: { duration: 0.5 },
+    },
+    still: { x: 0 },
   };
 
   return (
@@ -88,17 +122,50 @@ function Signup() {
         </div>
         {/* right side */}
         <div className="flex flex-col w-full z-10 md:items-start md:justify-items-start md:w-1/2 min-h-[calc(100vh-5rem)]">
-          <form
+          <motion.form
             className="bg-white border border-gray-200 rounded-md shadow-xl pt-8 pb-0.5 w-[576px] flex flex-col item gap-2"
             onSubmit={handleSubmit}
+            variants={shakeVariant}
+            animate={shake ? "shake" : "still"}
+            onAnimationComplete={() => setShake(false)}
           >
             <h1 className="text-2xl font-bold text-left text-gray-600 pl-19 mb-2">
               Create your Stripe account
             </h1>
             <div className="px-10 flex flex-col gap-4">
-              <InputFields divId="email" label="Email" type="email" />
-              <InputFields divId="username" label="Full name" type="text" />
-              <InputFields divId="password" label="Password" type="password" />
+              <InputFields
+                divId="email"
+                label="Email"
+                type="email"
+                value={fields.email}
+                onChange={(e) => {
+                  setFields({ ...fields, email: e.target.value });
+                  if (errors.emailError) setErrors({ ...errors, emailError: "" });
+                }}
+                error={errors.emailError}
+              />
+              <InputFields
+                divId="username"
+                label="Full name"
+                type="text"
+                value={fields.username}
+                onChange={(e) => {
+                  setFields({ ...fields, username: e.target.value });
+                  if (errors.usernameError) setErrors({ ...errors, usernameError: "" });
+                }}
+                error={errors.usernameError}
+              />
+              <InputFields
+                divId="password"
+                label="Password"
+                type="password"
+                value={fields.password}
+                onChange={(e) => {
+                  setFields({ ...fields, password: e.target.value });
+                  if (errors.passwordError) setErrors({ ...errors, passwordError: "" });
+                }}
+                error={errors.passwordError}
+              />
               <CountryDropdown
                 label="Country"
                 value={country}
@@ -146,7 +213,7 @@ function Signup() {
                 </a>
               </div>
             </div>
-          </form>
+          </motion.form>
         </div>
       </div>
       <motion.div
