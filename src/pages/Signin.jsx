@@ -6,6 +6,52 @@ import { useNavigate } from "react-router-dom";
 
 function Signin() {
   const navigate = useNavigate();
+  const [fields, setFields] = useState({
+    email: "",
+    password: "",
+  });
+
+  const [error, setError] = useState({
+    emailError: "",
+    passwordError: "",
+  });
+
+  const [shake, setShake] = useState(false);
+
+  const shakeVariant = {
+    shake: {
+      x: [0, -10, 10, -10, 10, 0],
+      transition: { duration: 0.5 },
+    },
+    still: { x: 0 },
+  };
+
+  const validate = () => {
+    const newErrors = {};
+    if (!fields.email) {
+      newErrors.emailError = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(fields.email)) {
+      newErrors.emailError = "Email is invalid";
+    }
+    if (!fields.password) {
+      newErrors.passwordError = "Password is required";
+    } else if (fields.password.length < 6) {
+      newErrors.passwordError = "Password must be at least 6 characters";
+    }
+    return newErrors;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const validationErrors = validate();
+    if (Object.keys(validationErrors).length > 0) {
+      setError(validationErrors);
+      setShake(true);
+      return;
+    }
+    setError({ emailError: "", passwordError: "" });
+  };
+
   return (
     <div className="min-h-screen flex flex-col relative overflow-hidden">
       <div className="absolute inset-0 hide-below-880 -z-4">
@@ -39,12 +85,28 @@ function Signin() {
         />
       </div>
       <div className="flex flex-col w-full z-10 justify-center items-center mt-10">
-        <form className="bg-white border border-gray-200 rounded-md shadow-xl pt-8 pb-0.5 w-xl flex flex-col item gap-2">
+        <motion.form
+          className="bg-white border border-gray-200 rounded-md shadow-xl pt-8 pb-0.5 w-xl flex flex-col item gap-2"
+          onSubmit={handleSubmit}
+          variants={shakeVariant}
+          animate={shake ? "shake" : "still"}
+          onAnimationComplete={() => setShake(false)}
+        >
           <h1 className="text-2xl font-bold text-left text-gray-600 pl-19 mb-2 mt-6">
             Sign in to your account
           </h1>
           <div className="px-10 flex flex-col gap-4">
-            <InputFields divId="email" label="Email" type="email" />
+            <InputFields
+              divId="email"
+              label="Email"
+              type="email"
+              value={fields.email}
+              onChange={(e) => {
+                setFields({ ...fields, email: e.target.value });
+                if (error.emailError) setError({ ...error, emailError: "" });
+              }}
+              error={error.emailError}
+            />
             <div className="flex flex-col gap-2 px-10">
               <div className="flex justify-between items-center">
                 <label htmlFor="password" className="text-sm font-medium">
@@ -61,8 +123,21 @@ function Signin() {
                 id="password"
                 name="password"
                 type="password"
-                className="border border-gray-300 rounded-md px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-[#635bff]"
+                className={`border rounded-md px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-[#635bff] ${
+                  error.passwordError ? "border-red-500" : "border-gray-300"
+                }`}
+                value={fields.password}
+                onChange={(e) => {
+                  setFields({ ...fields, password: e.target.value });
+                  if (error.passwordError)
+                    setError({ ...error, passwordError: "" });
+                }}
               />
+              {error.passwordError && (
+                <span className="text-xs text-red-500 mt-1">
+                  {error.passwordError}
+                </span>
+              )}
               <div className="flex items-center mt-2">
                 <input
                   id="remember"
@@ -138,7 +213,7 @@ function Signin() {
               </div>
             </div>
           </div>
-        </form>
+        </motion.form>
         <div className="flex items-start justify-center mt-6">
           <div className="flex items-start px-6 py-4 w-xl">
             <svg
