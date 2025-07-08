@@ -14,7 +14,7 @@ A modern clone of the Stripe Login and Signup page built using React. This proje
 - React
 - Tailwind CSS
 - Framer Motion
-- React Router (if navigation is included)
+- React Router
 
 ## 🌐 Live Demo
 
