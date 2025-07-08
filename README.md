@@ -1,12 +1,28 @@
-# React + Vite
+# 🔐 Stripe Auth UI Clone
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern clone of the Stripe Login and Signup page built using React. This project mimics Stripe’s authentication page design and includes smooth animations powered by Framer Motion.
 
-Currently, two official plugins are available:
+## ✨ Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 🎨 Stripe-inspired modern design
+- 🔒 Login and Signup forms with clean layout
+- 🧩 Smooth page animations using Framer Motion
+- ✅ Basic form validation
 
-## Expanding the ESLint configuration
+## 🛠️ Tech Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- React
+- Tailwind CSS
+- Framer Motion
+- React Router (if navigation is included)
+
+## 🌐 Live Demo
+
+Check out the live version here:  
+👉 [https://stripe-replicate.vercel.app](https://stripe-replicate.vercel.app/)
+
+## 📎 Reference
+
+This UI is inspired by the official Stripe Signup page:  
+🔗 [Stripe Register](https://dashboard.stripe.com/register)
+
